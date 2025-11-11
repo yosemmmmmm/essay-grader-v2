@@ -38,7 +38,16 @@ CURRENT_DIR=$(pwd)
 if [ "$CURRENT_DIR" != "$DEPLOY_DIR" ]; then
     echo "从 $CURRENT_DIR 复制文件到 $DEPLOY_DIR"
     cp -r backend ${DEPLOY_DIR}/
-    cp -r frontend/dist ${DEPLOY_DIR}/frontend/
+    
+    # 如果 frontend/dist 存在，复制它
+    if [ -d "frontend/dist" ]; then
+        mkdir -p ${DEPLOY_DIR}/frontend
+        cp -r frontend/dist ${DEPLOY_DIR}/frontend/
+    else
+        echo "⚠️  warning: frontend/dist 不存在，请先运行 'npm run build'"
+        mkdir -p ${DEPLOY_DIR}/frontend/dist
+    fi
+    
     cp -r deploy ${DEPLOY_DIR}/
 fi
 
